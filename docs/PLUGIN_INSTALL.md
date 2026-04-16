@@ -8,8 +8,8 @@
 ## 1. 安装项目
 
 ```bash
-git clone https://github.com/<your-user>/llm-wiki.git
-cd llm-wiki
+git clone https://github.com/mango8853/agent-llm-wiki.git
+cd agent-llm-wiki
 python3 -m pip install -e ".[mcp]"
 ```
 

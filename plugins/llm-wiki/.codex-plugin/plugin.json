@@ -5,8 +5,8 @@
   "author": {
     "name": "mango"
   },
-  "homepage": "https://github.com/[your-user]/llm-wiki",
-  "repository": "https://github.com/[your-user]/llm-wiki",
+  "homepage": "https://github.com/mango8853/agent-llm-wiki",
+  "repository": "https://github.com/mango8853/agent-llm-wiki",
   "license": "MIT",
   "keywords": [
     "llm",
@@ -26,7 +26,7 @@
       "Interactive",
       "Write"
     ],
-    "websiteURL": "https://github.com/[your-user]/llm-wiki",
+    "websiteURL": "https://github.com/mango8853/agent-llm-wiki",
     "defaultPrompt": [
       "Read the wiki index first, then jump into the most relevant topic page or search results before answering."
     ],
