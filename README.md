@@ -53,7 +53,7 @@ PYTHONPATH=src python3 -m llm_wiki.cli --help
 
 ```bash
 llm-wiki import-batch \
-  --input examples/raw/karpathy-batch.md \
+  --input examples/raw/yamada-batch.md \
   --output examples/generated
 ```
 
@@ -61,17 +61,17 @@ llm-wiki import-batch \
 
 ```bash
 llm-wiki import-batch \
-  --input examples/raw/karpathy-wild.md \
+  --input examples/raw/yamada-wild.md \
   --output examples/generated \
-  --person-slug andrej-karpathy \
-  --default-source-ref examples/raw/karpathy-wild.md
+  --person-slug yamada-anna \
+  --default-source-ref examples/raw/yamada-wild.md
 ```
 
 如果你的爬虫脚本是一条条推送，也可以直接 ingest 单条 JSON：
 
 ```bash
 echo '{
-  "person_slug": "andrej-karpathy",
+  "person_slug": "yamada-anna",
   "when": "2026-04-16T21:00:00+08:00",
   "topics": ["agents", "evals"],
   "source_refs": ["raw/live-feed.md#L120"],
@@ -103,9 +103,9 @@ llm-wiki-mcp --wiki-root /absolute/path/to/llm-wiki/dist
 
 ```md
 # Person
-name: Andrej Karpathy
-slug: andrej-karpathy
-aliases: K神 | Karpathy
+name: Yamada Anna
+slug: yamada-anna
+aliases: Anna | Yamada
 description: AI researcher, educator, and builder.
 
 # Statements
@@ -115,7 +115,7 @@ when: 2025-02-15T09:30:00+08:00
 sort_date: 2025-02-15T09:30:00+08:00
 title: Context engineering
 source_refs:
-- raw/karpathy-notes.md#L10
+- raw/yamada-notes.md#L10
 - https://example.com/post/1
 topics: context engineering | agents | prompting
 summary: He reframes prompt engineering as context engineering for production agents.
@@ -180,7 +180,7 @@ canonical: true
 
 ```md
 # Increment
-person_slug: andrej-karpathy
+person_slug: yamada-anna
 update_note: Add remarks from a new podcast episode.
 
 # Statements
@@ -210,14 +210,14 @@ claims:
 校验基础文件：
 
 ```bash
-llm-wiki check --source examples/andrej-karpathy.md
+llm-wiki check --source examples/yamada-anna.md
 ```
 
 构建 wiki：
 
 ```bash
 llm-wiki build \
-  --source examples/andrej-karpathy.md \
+  --source examples/yamada-anna.md \
   --increments examples/increments \
   --output dist
 ```
@@ -226,7 +226,7 @@ llm-wiki build \
 
 ```text
 dist/
-  andrej-karpathy/
+  yamada-anna/
     AGENTS.md
     index.md
     timeline.md
@@ -245,7 +245,7 @@ dist/
 ```bash
 cat payload.json | llm-wiki ingest-statement \
   --increments examples/live-increments \
-  --source examples/andrej-karpathy.md \
+  --source examples/yamada-anna.md \
   --build-output dist
 ```
 
@@ -259,10 +259,10 @@ cat payload.json | llm-wiki ingest-statement \
 
 ```md
 # Batch
-person_slug: andrej-karpathy
+person_slug: yamada-anna
 update_note: Import a note dump collected from one long markdown file.
 default_when: unknown
-default_source_refs: raw/karpathy-batch.md
+default_source_refs: raw/yamada-batch.md
 
 # Entries
 
@@ -293,7 +293,7 @@ The way to learn is to build and ship.
 
 ```bash
 llm-wiki import-batch \
-  --input examples/raw/karpathy-batch.md \
+  --input examples/raw/yamada-batch.md \
   --output examples/generated
 ```
 
@@ -301,7 +301,7 @@ llm-wiki import-batch \
 
 ```bash
 llm-wiki build \
-  --source examples/andrej-karpathy.md \
+  --source examples/yamada-anna.md \
   --increments examples/generated \
   --output dist
 ```
@@ -396,10 +396,10 @@ llm-wiki import-batch \
 
 仓库里的公开 sample 只包含可以开源分发的示例材料：
 
-- `examples/andrej-karpathy.md`
+- `examples/yamada-anna.md`
 - `examples/trader-sample.md`
-- `examples/raw/karpathy-batch.md`
-- `examples/raw/karpathy-wild.md`
+- `examples/raw/yamada-batch.md`
+- `examples/raw/yamada-wild.md`
 - `examples/raw/trader-sample-notes.md`
 
 如果你本地还有不适合发布的人物资料，建议放在忽略路径里，不要把它们作为仓库 sample 提交。
@@ -425,11 +425,3 @@ llm-wiki build \
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
-
-## 13. 后续可以继续扩展
-
-- 自动把播客/视频字幕转成基础格式
-- 给 `_meta/statements.json` 包一个轻量 API
-- 接向量检索做“wiki 优先，原文兜底”
-- 自动生成人物观点变化时间线
-- 增加 `lint` 规则，比如强制所有 statement 都带 `text`

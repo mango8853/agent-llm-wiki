@@ -1,7 +1,7 @@
 # Person
-name: Andrej Karpathy
-slug: andrej-karpathy
-aliases: K神 | Karpathy
+name: Yamada Anna
+slug: yamada-anna
+aliases: Anna | Yamada
 description: AI researcher, educator, and builder focused on practical deep learning systems.
 
 # Statements
@@ -10,7 +10,7 @@ description: AI researcher, educator, and builder focused on practical deep lear
 when: 2025-02-15
 title: Context engineering
 source_refs:
-- raw/karpathy-notes.md#L10
+- raw/yamada-notes.md#L10
 - https://example.com/x/context-engineering
 topics: context engineering | agents | prompting
 summary: He reframes prompt engineering as context engineering for production-grade agents.
@@ -27,7 +27,7 @@ canonical: true
 ## talk-2024-06-08-tokens-are-the-new-software
 when: 2024-06-08
 source_refs:
-- raw/karpathy-notes.md#L28
+- raw/yamada-notes.md#L28
 - https://example.com/talk/tokens-are-the-new-software
 topics: software engineering | llms | interfaces
 summary: He argues that prompting and data formatting are becoming a new software interface layer.
@@ -42,7 +42,7 @@ notes:
 ## interview-2023-11-21-build-llms
 when: 2023-11-21
 source_refs:
-- raw/karpathy-notes.md#L40
+- raw/yamada-notes.md#L40
 - https://example.com/interview/build-llm-products
 topics: product | agents | evals
 summary: He emphasizes that getting LLM products into production requires iteration, evals, and real user feedback.

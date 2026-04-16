@@ -13,11 +13,11 @@ from llm_wiki.wiki_backend import WikiBackend
 class EndToEndTests(unittest.TestCase):
     def test_build_generates_expected_files(self) -> None:
         root = Path(__file__).resolve().parent.parent
-        source = root / "examples" / "andrej-karpathy.md"
+        source = root / "examples" / "yamada-anna.md"
         increments = root / "examples" / "increments"
 
         report = validate_inputs(source, increments)
-        self.assertEqual(report["slug"], "andrej-karpathy")
+        self.assertEqual(report["slug"], "yamada-anna")
         self.assertEqual(report["total_statements"], 4)
 
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -30,15 +30,15 @@ class EndToEndTests(unittest.TestCase):
             self.assertTrue((wiki_root / "_meta" / "statements.json").exists())
 
             index_text = (wiki_root / "index.md").read_text(encoding="utf-8")
-            self.assertIn("Andrej Karpathy", index_text)
+            self.assertIn("Yamada Anna", index_text)
             self.assertIn("podcast-2026-04-10-evals-are-infra", (wiki_root / "sources.md").read_text(encoding="utf-8"))
             agents_text = (wiki_root / "topics" / "agents.md").read_text(encoding="utf-8")
             self.assertIn("Original Text", agents_text)
 
     def test_import_batch_generates_increment_that_build_can_use(self) -> None:
         root = Path(__file__).resolve().parent.parent
-        source = root / "examples" / "andrej-karpathy.md"
-        batch_input = root / "examples" / "raw" / "karpathy-batch.md"
+        source = root / "examples" / "yamada-anna.md"
+        batch_input = root / "examples" / "raw" / "yamada-batch.md"
 
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_root = Path(tmpdir)
@@ -56,8 +56,8 @@ class EndToEndTests(unittest.TestCase):
 
     def test_import_batch_accepts_loose_markdown_formats(self) -> None:
         root = Path(__file__).resolve().parent.parent
-        source = root / "examples" / "andrej-karpathy.md"
-        batch_input = root / "examples" / "raw" / "karpathy-wild.md"
+        source = root / "examples" / "yamada-anna.md"
+        batch_input = root / "examples" / "raw" / "yamada-wild.md"
 
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_root = Path(tmpdir)
@@ -65,7 +65,7 @@ class EndToEndTests(unittest.TestCase):
             output_increment = import_batch(
                 batch_input,
                 generated_dir,
-                options=ImportOptions(person_slug="andrej-karpathy"),
+                options=ImportOptions(person_slug="yamada-anna"),
             )
 
             increment_text = output_increment.read_text(encoding="utf-8")
@@ -78,12 +78,12 @@ class EndToEndTests(unittest.TestCase):
 
     def test_ingest_single_statement_can_write_increment_and_build(self) -> None:
         root = Path(__file__).resolve().parent.parent
-        source = root / "examples" / "andrej-karpathy.md"
+        source = root / "examples" / "yamada-anna.md"
 
         payload = load_payload_from_json(
             json.dumps(
                 {
-                    "person_slug": "andrej-karpathy",
+                    "person_slug": "yamada-anna",
                     "when": "2026-04-16T21:00:00+08:00",
                     "topics": ["agents", "evals"],
                     "source_refs": ["raw/live-feed.md#L120"],
@@ -147,7 +147,7 @@ class EndToEndTests(unittest.TestCase):
 
     def test_wiki_backend_reads_built_wiki(self) -> None:
         root = Path(__file__).resolve().parent.parent
-        source = root / "examples" / "andrej-karpathy.md"
+        source = root / "examples" / "yamada-anna.md"
         increments = root / "examples" / "increments"
 
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -156,13 +156,13 @@ class EndToEndTests(unittest.TestCase):
             backend = WikiBackend(tmp_root / "dist")
 
             people = backend.list_people()
-            self.assertEqual(people[0]["slug"], "andrej-karpathy")
-            self.assertIn("Andrej Karpathy", backend.get_index("andrej-karpathy"))
-            topics = backend.list_topics("andrej-karpathy")
+            self.assertEqual(people[0]["slug"], "yamada-anna")
+            self.assertIn("Yamada Anna", backend.get_index("yamada-anna"))
+            topics = backend.list_topics("yamada-anna")
             self.assertTrue(any(item["topic"] == "agents" for item in topics))
-            search = backend.search_statements("andrej-karpathy", query="measure", limit=5)
+            search = backend.search_statements("yamada-anna", query="measure", limit=5)
             self.assertGreaterEqual(search["total"], 1)
-            statement = backend.get_statement("andrej-karpathy", "podcast-2026-04-10-evals-are-infra")
+            statement = backend.get_statement("yamada-anna", "podcast-2026-04-10-evals-are-infra")
             self.assertIn("measure the behavior", statement["text"])
 
 

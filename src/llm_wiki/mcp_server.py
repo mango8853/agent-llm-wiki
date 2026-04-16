@@ -103,7 +103,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         "--wiki-root",
         type=Path,
         default=Path(os.environ.get("LLM_WIKI_ROOT", "./dist")),
-        help="Directory containing built person wiki folders such as dist/trader-sample.",
+        help="Directory containing built person wiki folders such as dist/yamada-anna.",
     )
     args = parser.parse_args(argv)
 

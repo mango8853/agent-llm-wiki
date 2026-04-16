@@ -1,8 +1,8 @@
 # Batch
-person_slug: andrej-karpathy
+person_slug: yamada-anna
 update_note: Import a note dump collected from one long markdown file.
 default_when: unknown
-default_source_refs: raw/karpathy-batch.md
+default_source_refs: raw/yamada-batch.md
 
 # Entries
 

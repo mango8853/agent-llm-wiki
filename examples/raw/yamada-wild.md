@@ -1,7 +1,7 @@
-person_slug: andrej-karpathy
+person_slug: yamada-anna
 update_note: Import from a looser markdown note dump.
 default_source_refs:
-- raw/karpathy-wild.md
+- raw/yamada-wild.md
 
 ## Context engineering
 when: 2025-02-15
