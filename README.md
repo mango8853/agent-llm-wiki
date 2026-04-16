@@ -57,6 +57,10 @@ llm-wiki
 - 你也可以手动把一个现成 wiki 文件夹复制到这个目录里
 - 只要子目录里有 `index.md` 和 `WIKI_AGENT.md`，插件就会把它识别成一个可读 wiki
 
+如果你只想要最短安装说明，直接看：
+
+- `docs/AGENT_QUICKSTART.md`
+
 也可以不安装，直接这样跑：
 
 ```bash
@@ -396,6 +400,7 @@ llm-wiki import-batch \
 
 更完整的安装步骤在：
 
+- `docs/AGENT_QUICKSTART.md`
 - `docs/PLUGIN_INSTALL.md`
 
 ## 10. 推荐接入远端 agent 的方式
