@@ -84,7 +84,7 @@ echo '{
 
 ```bash
 llm-wiki autotag-topics \
-  --source examples/langda.md \
+  --source examples/trader-sample.md \
   --replace-existing
 ```
 
@@ -392,22 +392,31 @@ llm-wiki import-batch \
 
 生成的 `AGENTS.md` 已经把这套规则写好了。
 
-## 11. 示例
+## 11. 公开 sample 与私有资料
 
-运行：
+仓库里的公开 sample 只包含可以开源分发的示例材料：
+
+- `examples/andrej-karpathy.md`
+- `examples/trader-sample.md`
+- `examples/raw/karpathy-batch.md`
+- `examples/raw/karpathy-wild.md`
+- `examples/raw/trader-sample-notes.md`
+
+如果你本地还有不适合发布的人物资料，建议放在忽略路径里，不要把它们作为仓库 sample 提交。
+
+运行一个公开示例：
 
 ```bash
 llm-wiki build \
-  --source examples/andrej-karpathy.md \
-  --increments examples/increments \
+  --source examples/trader-sample.md \
   --output dist
 ```
 
 然后打开：
 
-- `dist/andrej-karpathy/index.md`
-- `dist/andrej-karpathy/topics/agents.md`
-- `dist/andrej-karpathy/AGENTS.md`
+- `dist/trader-sample/index.md`
+- `dist/trader-sample/topics/risk-management.md`
+- `dist/trader-sample/AGENTS.md`
 
 ## 12. 开发与测试
 

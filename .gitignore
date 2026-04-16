@@ -5,3 +5,6 @@ __pycache__/
 *.pyc
 dist/
 *.egg-info/
+examples/langda.md
+examples/raw/langda-*.md
+private_data/

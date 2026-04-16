@@ -13,19 +13,21 @@ cd llm-wiki
 python3 -m pip install -e ".[mcp]"
 ```
 
-## 2. 先构建 wiki
+## 2. 先构建一个公开 sample
 
 ```bash
 llm-wiki build \
-  --source examples/langda.md \
+  --source examples/trader-sample.md \
   --output dist
 ```
 
 这会生成：
 
 ```text
-dist/langda/
+dist/trader-sample/
 ```
+
+如果你要给自己的私有资料建库，也建议把原始文件放在本地忽略路径里，再单独 build 到自己的 `dist/` 目录。
 
 ## 3. 直接启动 MCP server
 
