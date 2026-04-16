@@ -1,0 +1,35 @@
+{
+  "name": "llm-wiki",
+  "version": "0.1.0",
+  "description": "Build and read transferable markdown-based person wikis through a CLI plus a read-only MCP server.",
+  "author": {
+    "name": "mango"
+  },
+  "homepage": "https://github.com/[your-user]/llm-wiki",
+  "repository": "https://github.com/[your-user]/llm-wiki",
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "wiki",
+    "mcp",
+    "knowledge-base",
+    "agents"
+  ],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "LLM Wiki",
+    "shortDescription": "Read transferable markdown wikis through MCP",
+    "longDescription": "Use a generated LLM wiki as a reusable context layer for agents. The plugin exposes a read-only MCP server for people, topics, timelines, sources, and statement search while the project CLI continues to handle building and updates.",
+    "developerName": "mango",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/[your-user]/llm-wiki",
+    "defaultPrompt": [
+      "Read the wiki index first, then jump into the most relevant topic page or search results before answering."
+    ],
+    "screenshots": []
+  }
+}
