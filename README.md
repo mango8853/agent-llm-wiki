@@ -34,6 +34,8 @@
 ## 2. 安装
 
 ```bash
+git clone https://github.com/mango8853/agent-llm-wiki.git
+cd agent-llm-wiki
 python3 -m pip install -e .
 ```
 
