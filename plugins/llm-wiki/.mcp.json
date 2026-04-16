@@ -2,10 +2,7 @@
   "mcpServers": {
     "llm-wiki": {
       "command": "llm-wiki-mcp",
-      "args": [],
-      "env": {
-        "LLM_WIKI_ROOT": "[TODO: absolute path to your built wiki root, for example /path/to/repo/dist]"
-      }
+      "args": []
     }
   }
 }

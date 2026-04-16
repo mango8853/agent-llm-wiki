@@ -38,7 +38,7 @@ def build_wiki(source_path: Path, output_root: Path, increments_dir: Optional[Pa
     _write_file(wiki_root / "timeline.md", render_timeline(source_doc.person, merged_statements))
     _write_file(wiki_root / "sources.md", render_sources(source_doc.person, merged_statements))
     _write_file(wiki_root / "log.md", render_log(source_doc.person, source_doc.path, increments))
-    _write_file(wiki_root / "AGENTS.md", render_agents(source_doc.person))
+    _write_file(wiki_root / "WIKI_AGENT.md", render_wiki_agent(source_doc.person))
 
     for topic, statements in group_by_topic(merged_statements).items():
         _write_file(topic_dir / f"{topic_slug(topic)}.md", render_topic_page(source_doc.person, topic, statements))
@@ -245,9 +245,9 @@ def render_log(person: Person, source_path: Path, increments: List[Document]) ->
     return "\n".join(lines)
 
 
-def render_agents(person: Person) -> str:
+def render_wiki_agent(person: Person) -> str:
     lines = [
-        f"# AGENTS.md for {person.name}",
+        f"# WIKI_AGENT.md for {person.name}",
         "",
         "This wiki is the preferred context layer for answering questions about this person.",
         "",

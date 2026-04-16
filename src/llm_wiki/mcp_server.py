@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from pathlib import Path
 from typing import Optional
 
+from .paths import default_wiki_root
 from .wiki_backend import WikiBackend, WikiBackendError
 
 
@@ -44,9 +44,19 @@ def create_server():
         return _backend().get_index(person_slug)
 
     @mcp.tool()
+    def get_library_guide() -> str:
+        """Read the library-level routing guide for all installed wikis."""
+        return _backend().get_library_guide()
+
+    @mcp.tool()
+    def get_wiki_guide(person_slug: str) -> str:
+        """Read the WIKI_AGENT.md guide for one person wiki."""
+        return _backend().get_wiki_guide(person_slug)
+
+    @mcp.tool()
     def get_agents_guide(person_slug: str) -> str:
-        """Read the AGENTS.md guide for one person wiki."""
-        return _backend().get_agents_guide(person_slug)
+        """Legacy alias for get_wiki_guide(person_slug)."""
+        return _backend().get_wiki_guide(person_slug)
 
     @mcp.tool()
     def list_topics(person_slug: str) -> list[dict]:
@@ -102,8 +112,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument(
         "--wiki-root",
         type=Path,
-        default=Path(os.environ.get("LLM_WIKI_ROOT", "./dist")),
-        help="Directory containing built person wiki folders such as dist/yamada-anna.",
+        default=default_wiki_root(),
+        help="Directory containing installed person wiki folders. Defaults to ~/.llm-wiki/wikis.",
     )
     args = parser.parse_args(argv)
 

@@ -8,6 +8,7 @@ import sys
 from .builder import build_wiki, validate_inputs
 from .ingest import ingest_statement, load_payload_from_json
 from .importer import ImportOptions, import_batch
+from .paths import default_wiki_root
 from .parser import FormatError, slugify
 from .topic_autotag import autotag_source
 
@@ -19,7 +20,12 @@ def build_parser() -> argparse.ArgumentParser:
     build_cmd = subparsers.add_parser("build", help="Build a wiki from a source markdown file.")
     build_cmd.add_argument("--source", required=True, type=Path, help="Base markdown file with # Person and # Statements.")
     build_cmd.add_argument("--increments", type=Path, help="Directory with increment markdown files.")
-    build_cmd.add_argument("--output", required=True, type=Path, help="Directory where the wiki will be generated.")
+    build_cmd.add_argument(
+        "--output",
+        type=Path,
+        default=default_wiki_root(),
+        help="Directory where the wiki will be generated. Defaults to ~/.llm-wiki/wikis.",
+    )
 
     check_cmd = subparsers.add_parser("check", help="Validate source markdown files.")
     check_cmd.add_argument("--source", required=True, type=Path, help="Base markdown file with # Person and # Statements.")

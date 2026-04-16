@@ -1,6 +1,6 @@
 # llm-wiki
 
-把“某个人公开发言的 markdown 资料”编译成一个可持续增量更新的 markdown wiki，并生成一份给 agent 用的 `AGENTS.md`。
+把“某个人公开发言的 markdown 资料”编译成一个可持续增量更新的 markdown wiki，并生成一份给 agent 用的 `WIKI_AGENT.md`。
 
 这版 schema 已经按“人物语录档案”做过一轮收敛：
 
@@ -23,7 +23,7 @@
 - `topics/*.md`：按主题组织的发言
 - `sources.md`：来源目录
 - `log.md`：构建日志
-- `AGENTS.md`：给 LLM / agent 的阅读与引用约定
+- `WIKI_AGENT.md`：给 LLM / agent 的阅读与引用约定
 - `_meta/*.json`：机器可读清单，方便后续接 API 或检索
 
 完整形态现在是：
@@ -44,6 +44,18 @@ python3 -m pip install -e .
 ```bash
 llm-wiki
 ```
+
+默认的 wiki 库目录是：
+
+```text
+~/.llm-wiki/wikis
+```
+
+这意味着：
+
+- 你可以直接让 agent 调 `llm-wiki build --source <人物源文件.md>`，生成结果会默认落到这个库目录
+- 你也可以手动把一个现成 wiki 文件夹复制到这个目录里
+- 只要子目录里有 `index.md` 和 `WIKI_AGENT.md`，插件就会把它识别成一个可读 wiki
 
 也可以不安装，直接这样跑：
 
@@ -94,7 +106,7 @@ llm-wiki autotag-topics \
 
 ```bash
 python3 -m pip install -e ".[mcp]"
-llm-wiki-mcp --wiki-root /absolute/path/to/llm-wiki/dist
+llm-wiki-mcp
 ```
 
 ## 3. 基础人物发言文件格式
@@ -229,7 +241,7 @@ llm-wiki build \
 ```text
 dist/
   yamada-anna/
-    AGENTS.md
+    WIKI_AGENT.md
     index.md
     timeline.md
     sources.md
@@ -354,8 +366,9 @@ llm-wiki import-batch \
 可用工具包括：
 
 - `list_people`
+- `get_library_guide`
 - `get_index`
-- `get_agents_guide`
+- `get_wiki_guide`
 - `list_topics`
 - `get_topic_page`
 - `get_topic_statements`
@@ -367,10 +380,12 @@ llm-wiki import-batch \
 
 推荐 agent 的读取顺序：
 
-1. `get_index(person_slug)`
-2. `list_topics(person_slug)`
-3. `get_topic_statements(...)` 或 `search_statements(...)`
-4. 必要时 `get_statement(...)` 或 `get_sources(...)`
+1. `get_library_guide()`
+2. `list_people()`
+3. 选中人物后调用 `get_wiki_guide(person_slug)`
+4. `list_topics(person_slug)`
+5. `get_topic_statements(...)` 或 `search_statements(...)`
+6. 必要时 `get_statement(...)` 或 `get_sources(...)`
 
 ## 9. Plugin Install
 
@@ -392,7 +407,7 @@ llm-wiki import-batch \
 3. 再按主题去 `topics/*.md`
 4. 需要精确引用时先看每条 statement 自带的原文，再用 `sources.md` 追溯到源文件
 
-生成的 `AGENTS.md` 已经把这套规则写好了。
+生成的 `WIKI_AGENT.md` 已经把这套规则写好了。
 
 ## 11. 公开 sample 与私有资料
 
@@ -404,21 +419,24 @@ llm-wiki import-batch \
 - `examples/raw/yamada-wild.md`
 - `examples/raw/trader-sample-notes.md`
 
-如果你本地还有不适合发布的人物资料，建议放在忽略路径里，不要把它们作为仓库 sample 提交。
+如果你本地还有不适合发布的人物资料，建议放在忽略路径里，不要把它们作为仓库 sample 提交。更推荐的实际使用方式是：
+
+- 源文件放你自己管理的位置
+- 让 agent 调 `llm-wiki build --source /path/to/person.md`
+- 或者直接把一个现成 wiki 文件夹复制进 `~/.llm-wiki/wikis/`
 
 运行一个公开示例：
 
 ```bash
 llm-wiki build \
-  --source examples/trader-sample.md \
-  --output dist
+  --source examples/trader-sample.md
 ```
 
 然后打开：
 
-- `dist/trader-sample/index.md`
-- `dist/trader-sample/topics/risk-management.md`
-- `dist/trader-sample/AGENTS.md`
+- `~/.llm-wiki/wikis/trader-sample/index.md`
+- `~/.llm-wiki/wikis/trader-sample/topics/risk-management.md`
+- `~/.llm-wiki/wikis/trader-sample/WIKI_AGENT.md`
 
 ## 12. 开发与测试
 

@@ -33,7 +33,7 @@ class WikiBackend:
         for person_dir in sorted(self.wiki_root.iterdir(), key=lambda item: item.name):
             if not person_dir.is_dir():
                 continue
-            if not (person_dir / "index.md").exists():
+            if not self._looks_like_wiki(person_dir):
                 continue
             manifest = self._load_manifest(person_dir.name)
             person = manifest.get("person", {})
@@ -57,8 +57,59 @@ class WikiBackend:
     def get_sources(self, person_slug: str) -> str:
         return self._read_text(person_slug, "sources.md")
 
+    def get_library_guide(self) -> str:
+        people = self.list_people()
+        lines = [
+            "# Wiki Library Guide",
+            "",
+            "Use this library as a shared context shelf for person-specific wikis.",
+            "",
+            "## Routing Rules",
+            "",
+            "1. Call `list_people` first when you are not sure which wiki matches the question.",
+            "2. Choose the wiki whose person name, aliases, or description best match the user's target.",
+            "3. Then call `get_wiki_guide(person_slug)` before reading topic pages.",
+            "4. Prefer one wiki at a time unless the user explicitly asks for cross-person comparison.",
+            "",
+            "## Installed Wikis",
+            "",
+        ]
+        if not people:
+            lines.append("- No installed wikis found under the current wiki root.")
+        else:
+            for person in people:
+                lines.append(
+                    "- `{slug}`: {name} ({statement_count} statements, {topic_count} topics) - {description}".format(
+                        slug=person.get("slug", ""),
+                        name=person.get("name", ""),
+                        statement_count=person.get("statement_count", 0),
+                        topic_count=person.get("topic_count", 0),
+                        description=person.get("description", "") or "No description.",
+                    )
+                )
+        lines.extend(
+            [
+                "",
+                "## Install Rules",
+                "",
+                "- A subdirectory is treated as an installed wiki when it contains `index.md` plus `WIKI_AGENT.md`.",
+                "- Legacy wikis with `AGENTS.md` are still supported.",
+                "- Users may either build new wikis into this library directory or copy an existing wiki folder into it.",
+                "",
+            ]
+        )
+        return "\n".join(lines)
+
+    def get_wiki_guide(self, person_slug: str) -> str:
+        person_dir = self._person_dir(person_slug)
+        for filename in ("WIKI_AGENT.md", "AGENTS.md"):
+            path = person_dir / filename
+            if path.exists():
+                return path.read_text(encoding="utf-8")
+        raise WikiBackendError(f"wiki guide not found: {person_slug}")
+
     def get_agents_guide(self, person_slug: str) -> str:
-        return self._read_text(person_slug, "AGENTS.md")
+        return self.get_wiki_guide(person_slug)
 
     def list_topics(self, person_slug: str) -> List[Dict[str, object]]:
         counts: Dict[str, int] = {}
@@ -158,6 +209,13 @@ class WikiBackend:
         if not person_dir.exists():
             raise WikiBackendError(f"person wiki not found: {person_slug}")
         return person_dir
+
+    def _looks_like_wiki(self, person_dir: Path) -> bool:
+        if not (person_dir / "index.md").exists():
+            return False
+        if (person_dir / "WIKI_AGENT.md").exists() or (person_dir / "AGENTS.md").exists():
+            return True
+        return (person_dir / "_meta" / "manifest.json").exists()
 
     def _read_text(self, person_slug: str, relative_path: str) -> str:
         path = self._person_dir(person_slug) / relative_path

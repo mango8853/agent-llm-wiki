@@ -28,6 +28,7 @@ class EndToEndTests(unittest.TestCase):
             self.assertTrue((wiki_root / "timeline.md").exists())
             self.assertTrue((wiki_root / "topics" / "agents.md").exists())
             self.assertTrue((wiki_root / "_meta" / "statements.json").exists())
+            self.assertTrue((wiki_root / "WIKI_AGENT.md").exists())
 
             index_text = (wiki_root / "index.md").read_text(encoding="utf-8")
             self.assertIn("Yamada Anna", index_text)
@@ -158,6 +159,8 @@ class EndToEndTests(unittest.TestCase):
             people = backend.list_people()
             self.assertEqual(people[0]["slug"], "yamada-anna")
             self.assertIn("Yamada Anna", backend.get_index("yamada-anna"))
+            self.assertIn("Wiki Library Guide", backend.get_library_guide())
+            self.assertIn("WIKI_AGENT.md", backend.get_wiki_guide("yamada-anna"))
             topics = backend.list_topics("yamada-anna")
             self.assertTrue(any(item["topic"] == "agents" for item in topics))
             search = backend.search_statements("yamada-anna", query="measure", limit=5)

@@ -17,29 +17,37 @@ python3 -m pip install -e ".[mcp]"
 
 ```bash
 llm-wiki build \
-  --source examples/trader-sample.md \
-  --output dist
+  --source examples/trader-sample.md
 ```
 
 这会生成：
 
 ```text
-dist/trader-sample/
+~/.llm-wiki/wikis/trader-sample/
 ```
 
-如果你要给自己的私有资料建库，也建议把原始文件放在本地忽略路径里，再单独 build 到自己的 `dist/` 目录。
+如果你要给自己的私有资料建库，也建议把原始文件放在本地忽略路径里，然后让 agent 或 CLI 直接 build 到默认库目录。
+
+你也可以不 build，直接把一个现成 wiki 文件夹复制到：
+
+```text
+~/.llm-wiki/wikis/
+```
+
+插件会把带有 `index.md` 和 `WIKI_AGENT.md` 的子目录识别成已安装 wiki。
 
 ## 3. 直接启动 MCP server
 
 ```bash
-llm-wiki-mcp --wiki-root /absolute/path/to/llm-wiki/dist
+llm-wiki-mcp
 ```
 
 默认会暴露这些只读工具：
 
 - `list_people`
+- `get_library_guide`
 - `get_index`
-- `get_agents_guide`
+- `get_wiki_guide`
 - `list_topics`
 - `get_topic_page`
 - `get_topic_statements`
@@ -56,10 +64,7 @@ llm-wiki-mcp --wiki-root /absolute/path/to/llm-wiki/dist
   "mcpServers": {
     "llm-wiki": {
       "command": "llm-wiki-mcp",
-      "args": [],
-      "env": {
-        "LLM_WIKI_ROOT": "/absolute/path/to/llm-wiki/dist"
-      }
+      "args": []
     }
   }
 }
@@ -74,13 +79,14 @@ plugins/llm-wiki/.codex-plugin/plugin.json
 plugins/llm-wiki/.mcp.json
 ```
 
-把 `plugins/llm-wiki/.mcp.json` 里的 `LLM_WIKI_ROOT` 改成你的实际 wiki 根目录即可。
+这版插件默认就会读 `~/.llm-wiki/wikis`，所以正常情况下不需要再改路径。
 
 ## 6. 推荐 agent 读取顺序
 
-1. 先 `get_index(person_slug)`
-2. 再 `list_topics(person_slug)`
-3. 按问题调用 `get_topic_statements(...)` 或 `search_statements(...)`
-4. 需要完整出处时再 `get_sources(...)` 或 `get_statement(...)`
+1. 先 `get_library_guide()`
+2. 再 `list_people()`
+3. 选中人物后调用 `get_wiki_guide(person_slug)`
+4. 再按问题调用 `get_topic_statements(...)` 或 `search_statements(...)`
+5. 需要完整出处时再 `get_sources(...)` 或 `get_statement(...)`
 
 这样比直接读取整份超长 topic markdown 更稳。

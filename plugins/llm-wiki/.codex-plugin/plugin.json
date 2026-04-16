@@ -28,7 +28,7 @@
     ],
     "websiteURL": "https://github.com/mango8853/agent-llm-wiki",
     "defaultPrompt": [
-      "Read the wiki index first, then jump into the most relevant topic page or search results before answering."
+      "Call get_library_guide first, choose the right installed wiki, then read that wiki guide before opening topic pages or search results."
     ],
     "screenshots": []
   }
