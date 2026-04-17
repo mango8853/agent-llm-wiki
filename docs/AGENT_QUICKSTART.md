@@ -18,21 +18,6 @@ python3 -m pip install -e ".[mcp]"
 llm-wiki build --source /absolute/path/to/person.md
 ```
 
-如果你是狼大的 NGA 爬虫持续更新，也可以直接让轮询脚本盯 `posts.md`：
-
-```bash
-PYTHONPATH=src python3 scripts/langda_ingest.py \
-  --poll-seconds 600
-```
-
-这版脚本默认会使用：
-
-- `raw_posts`: `/home/mango/nga_spider/nga_downloads/自立自强，科学技术打头阵/posts.md`
-- `feed_source`: `/home/mango/.llm-wiki/sources/langda/langda_feed.md`
-- `build_source`: `/home/mango/.llm-wiki/sources/langda/langda.md`
-- `increments_dir`: `/home/mango/.llm-wiki/sources/langda/increments`
-- `wiki_root`: `/home/mango/.llm-wiki/wikis`
-
 方式 B：直接复制一个现成 wiki 文件夹到默认库目录
 
 ```text

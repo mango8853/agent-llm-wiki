@@ -98,31 +98,6 @@ echo '{
   --increments examples/live-increments
 ```
 
-如果你的远端爬虫是 NGA `posts.md` 持续增长，仓库里也可以直接用轮询脚本：
-
-```bash
-PYTHONPATH=src python3 scripts/langda_ingest.py \
-  --poll-seconds 600
-```
-
-这版脚本默认会直接读：
-
-- `/home/mango/nga_spider/nga_downloads/自立自强，科学技术打头阵/posts.md`
-
-并自动维护：
-
-- `/home/mango/.llm-wiki/sources/langda/langda_feed.md`
-- `/home/mango/.llm-wiki/sources/langda/increments/`
-- `/home/mango/.llm-wiki/wikis/langda/`
-
-推荐做法是：
-
-- `langda.md` 保持为稳定的基础人物文件
-- `langda_ingest.py` 负责从 `posts.md` 抽出狼大的新发言并写进 `langda_feed.md`
-- 然后只把“没见过的新 statement”转成 increment，再重建 wiki
-
-这样不会让基础源文件和增量目录变成两套重复事实源。
-
 如果一份人物源文件已经整理好了，但还没打 `topics`，可以直接自动补：
 
 ```bash

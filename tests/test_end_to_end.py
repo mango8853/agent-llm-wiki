@@ -1,7 +1,5 @@
 from pathlib import Path
 import json
-import os
-import subprocess
 import tempfile
 import unittest
 
@@ -169,113 +167,6 @@ class EndToEndTests(unittest.TestCase):
             self.assertGreaterEqual(search["total"], 1)
             statement = backend.get_statement("yamada-anna", "podcast-2026-04-10-evals-are-infra")
             self.assertIn("measure the behavior", statement["text"])
-
-    def test_langda_ingest_can_mirror_raw_posts_and_build_increment(self) -> None:
-        root = Path(__file__).resolve().parent.parent
-        script_path = root / "scripts" / "langda_ingest.py"
-
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmp_root = Path(tmpdir)
-            raw_posts = tmp_root / "posts.md"
-            feed_source = tmp_root / "langda_feed.md"
-            build_source = tmp_root / "langda.md"
-            increments_dir = tmp_root / "increments"
-            wiki_root = tmp_root / "wikis"
-
-            build_source.write_text(
-                "\n".join(
-                    [
-                        "# Person",
-                        "name: 狼大",
-                        "slug: langda",
-                        "aliases: 狼大 | -阿狼-",
-                        "description: 测试用人物。",
-                        "",
-                        "# Statements",
-                        "",
-                        "## base-1",
-                        "when: 2026-04-16T09:00:00+08:00",
-                        "text:",
-                        "> 旧的基础 statement。",
-                        "",
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-
-            raw_posts.write_text(
-                "\n".join(
-                    [
-                        "<!-- pid:1001 uid:150058 page:1 -->",
-                        "**[@狼大]**发帖时间：2026-04-17 10:30",
-                        "",
-                        "今天这里先做防守，不追高。",
-                        "",
-                        "---",
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-
-            base_cmd = [
-                "python3",
-                str(script_path),
-                "--raw-posts",
-                str(raw_posts),
-                "--feed-source",
-                str(feed_source),
-                "--build-source",
-                str(build_source),
-                "--increments-dir",
-                str(increments_dir),
-                "--wiki-root",
-                str(wiki_root),
-                "--once",
-            ]
-
-            first = subprocess.run(
-                base_cmd + ["--bootstrap", "skip-existing"],
-                cwd=root,
-                env={**os.environ, "PYTHONPATH": str(root / "src")},
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            self.assertIn('"new_statements": 0', first.stdout)
-            feed_text = feed_source.read_text(encoding="utf-8")
-            self.assertIn("## nga-2026-04-17-1001", feed_text)
-
-            raw_posts.write_text(
-                raw_posts.read_text(encoding="utf-8")
-                + "\n".join(
-                    [
-                        "<!-- pid:1002 uid:150058 page:1 -->",
-                        "**[@狼大]**发帖时间：2026-04-17 10:35",
-                        "",
-                        "机器人今天更像轮动，不是全面开花。",
-                        "",
-                        "---",
-                        "",
-                    ]
-                ),
-                encoding="utf-8",
-            )
-
-            second = subprocess.run(
-                base_cmd,
-                cwd=root,
-                env={**os.environ, "PYTHONPATH": str(root / "src")},
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            self.assertIn('"new_statements": 1', second.stdout)
-            self.assertTrue(any(increments_dir.glob("*.md")))
-            self.assertTrue((wiki_root / "langda" / "index.md").exists())
-            self.assertTrue((wiki_root / "langda" / "WIKI_AGENT.md").exists())
-            self.assertIn("机器人", feed_source.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
