@@ -1,10 +1,7 @@
 # llm-wiki
 
 把“某个人公开发言的 markdown 资料”编译成一个可持续增量更新的 markdown wiki，并生成一份给 agent 用的 `WIKI_AGENT.md`。
-
-这版 schema 已经按“人物语录档案”做过一轮收敛：
-
-- 原文必须直接放进每条 statement
+- 原文直接放进每条 statement
 - 时间允许精确到秒，也允许 `unknown`
 - `source_type`、`title`、`source_link`、`summary` 都不是必填
 - 一个 statement 可以挂多个本地或远端来源
@@ -25,8 +22,6 @@
 - `log.md`：构建日志
 - `WIKI_AGENT.md`：给 LLM / agent 的阅读与引用约定
 - `_meta/*.json`：机器可读清单，方便后续接 API 或检索
-
-完整形态现在是：
 
 - `CLI` 负责写：导入、增量、自动打 topics、重建 wiki
 - `MCP` 负责读：让 agent 只读访问已生成的 wiki
